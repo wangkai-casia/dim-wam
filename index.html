@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>DiM-WAM: Diverse Historical Event Memory</title>
+    <meta
+      name="description"
+      content="Project page for DiM-WAM, a memory-augmented world-action model with diverse historical event memory for long-horizon robot manipulation."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="#">DiM-WAM</a>
+        <div class="nav-links">
+          <a href="#abstract">Abstract</a>
+          <a href="#method">Method</a>
+          <a href="#simulation">Simulation</a>
+          <a href="#real-world">Real-World</a>
+          <a href="paper.pdf">Paper</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <h1>
+            DiM-WAM: World-Action Modeling with Diverse Historical Event Memory
+          </h1>
+          <p class="subtitle">
+            A memory-augmented world-action model that organizes diverse
+            historical events, local future dynamics, and global task progress
+            for long-horizon robot manipulation.
+          </p>
+          <p class="authors">
+            Kai Wang, Zhaopeng Gu, Yixiang Chen, Yuan Xu, Qisen Ma, Peng Su,
+            Zhaowen Li, Yan Huang, Liang Wang
+          </p>
+          <div class="actions" aria-label="Project links">
+            <a class="button primary" href="paper.pdf">Paper PDF</a>
+            <a class="button" href="#real-world">Real-World Videos</a>
+            <a class="button disabled" aria-disabled="true">Code Coming Soon</a>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img
+            src="assets/figures/real-world-exp-demo.png"
+            alt="Four real-world Franka Panda manipulation tasks."
+          />
+        </figure>
+      </section>
+
+      <section id="abstract" class="section narrow">
+        <p class="eyebrow">Abstract</p>
+        <h2>Long-horizon manipulation needs structured memory.</h2>
+        <p class="lead">
+          DiM-WAM stores compact visual events from real observations in
+          multiple bounded memory banks, reads them as long-term context during
+          video-action denoising, and uses progress supervision to represent the
+          current task stage.
+        </p>
+        <p>
+          World-action models jointly predict future visual states and actions,
+          but short local windows are insufficient when correct behavior depends
+          on earlier observations and task progress. DiM-WAM augments a base
+          WAM with diverse historical event memory: it extracts compact visual
+          events from real observations, updates multiple memory banks through
+          independent similarity-based merging, and reads bank-identity- and
+          time-embedded long-term context to condition video and action
+          denoising. A progress-supervision objective encourages memory tokens
+          to encode completed events, the current task stage, and implications
+          for the remaining task. On RMBench, DiM-WAM raises average success
+          from 28.4% with LingBot-VA to 68.0%, exceeding Mem-0 at 42.0%. On
+          four real-world Franka tasks, it improves average stage success from
+          70.7% to 91.5% and full-task success from 52.5% to 80.0%.
+        </p>
+      </section>
+
+      <section id="method" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Method</p>
+          <h2>Read, predict, interact, update.</h2>
+        </div>
+        <figure class="wide-figure">
+          <img
+            src="assets/figures/framework_memory_work.svg"
+            alt="Overview of DiM-WAM memory-augmented world-action modeling."
+          />
+          <figcaption>
+            DiM-WAM reads long-term memory, predicts short-term future video and
+            actions, executes the action, and updates memory only from real
+            observations.
+          </figcaption>
+        </figure>
+        <div class="feature-grid">
+          <article>
+            <h3>Multi-scale temporal context</h3>
+            <p>
+              Local history and short-term future prediction handle immediate
+              control, while long-term memory preserves cross-stage events that
+              have left the sliding window.
+            </p>
+          </article>
+          <article>
+            <h3>Multi-bank event memory</h3>
+            <p>
+              Independent similarity-based compression lets parallel banks keep
+              complementary historical evidence under a fixed token budget.
+            </p>
+          </article>
+          <article>
+            <h3>Progress-aware learning</h3>
+            <p>
+              A task-progress objective encourages memory tokens to encode both
+              completed events and the current goal-relative stage.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="simulation" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Simulation Experiments</p>
+          <h2>RMBench Simulation Results</h2>
+          <p>
+            RMBench evaluates long-horizon non-Markovian manipulation tasks
+            where local observations can become ambiguous after key historical
+            evidence leaves the context window.
+          </p>
+        </div>
+        <div class="results-grid">
+          <article class="metric">
+            <span class="metric-value">68.0%</span>
+            <span class="metric-label">RMBench total average success</span>
+            <p>LingBot-VA baseline: 28.4%; Mem-0 explicit-memory baseline: 42.0%.</p>
+          </article>
+          <article class="metric">
+            <span class="metric-value">77.4%</span>
+            <span class="metric-label">Average success on M(1) tasks</span>
+            <p>Improves over LingBot-VA at 22.8% and Mem-0 at 52.8%.</p>
+          </article>
+          <article class="metric">
+            <span class="metric-value">56.3%</span>
+            <span class="metric-label">Average success on M(n) tasks</span>
+            <p>Improves over LingBot-VA at 35.5% and Mem-0 at 28.5%.</p>
+          </article>
+        </div>
+        <div class="table-wrap" role="region" aria-label="Simulation results table">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>TMC</th>
+                <th>DP</th>
+                <th>ACT</th>
+                <th>pi0.5</th>
+                <th>X-VLA</th>
+                <th>Mem-0</th>
+                <th>LingBot-VA</th>
+                <th>DiM-WAM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Observe and Pick Up</td>
+                <td>M(1)</td>
+                <td>1.0</td>
+                <td>1.0</td>
+                <td>9.0</td>
+                <td>9.0</td>
+                <td>4.0</td>
+                <td>4.0</td>
+                <td>13.0</td>
+              </tr>
+              <tr>
+                <td>Rearrange Blocks</td>
+                <td>M(1)</td>
+                <td>0.0</td>
+                <td>29.0</td>
+                <td>13.0</td>
+                <td>13.0</td>
+                <td>89.0</td>
+                <td>27.0</td>
+                <td>99.0</td>
+              </tr>
+              <tr>
+                <td>Put Back Block</td>
+                <td>M(1)</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>11.0</td>
+                <td>18.0</td>
+                <td>90.0</td>
+                <td>24.0</td>
+                <td>82.0</td>
+              </tr>
+              <tr>
+                <td>Swap Blocks</td>
+                <td>M(1)</td>
+                <td>11.0</td>
+                <td>2.0</td>
+                <td>24.0</td>
+                <td>16.0</td>
+                <td>67.0</td>
+                <td>34.0</td>
+                <td>96.0</td>
+              </tr>
+              <tr>
+                <td>Swap T</td>
+                <td>M(1)</td>
+                <td>20.0</td>
+                <td>2.0</td>
+                <td>15.0</td>
+                <td>3.0</td>
+                <td>14.0</td>
+                <td>25.0</td>
+                <td>97.0</td>
+              </tr>
+              <tr class="summary-row">
+                <td>Average</td>
+                <td>M(1)</td>
+                <td>6.4</td>
+                <td>6.8</td>
+                <td>14.4</td>
+                <td>11.8</td>
+                <td>52.8</td>
+                <td>22.8</td>
+                <td>77.4</td>
+              </tr>
+              <tr>
+                <td>Battery Try</td>
+                <td>M(n)</td>
+                <td>10.0</td>
+                <td>19.0</td>
+                <td>16.0</td>
+                <td>26.0</td>
+                <td>28.0</td>
+                <td>33.0</td>
+                <td>48.0</td>
+              </tr>
+              <tr>
+                <td>Blocks Ranking Try</td>
+                <td>M(n)</td>
+                <td>10.0</td>
+                <td>0.0</td>
+                <td>6.0</td>
+                <td>1.0</td>
+                <td>18.0</td>
+                <td>48.0</td>
+                <td>87.0</td>
+              </tr>
+              <tr>
+                <td>Cover Blocks</td>
+                <td>M(n)</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>2.0</td>
+                <td>68.0</td>
+                <td>42.0</td>
+                <td>56.0</td>
+              </tr>
+              <tr>
+                <td>Press Button</td>
+                <td>M(n)</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>19.0</td>
+                <td>34.0</td>
+              </tr>
+              <tr class="summary-row">
+                <td>Average</td>
+                <td>M(n)</td>
+                <td>5.0</td>
+                <td>4.8</td>
+                <td>5.5</td>
+                <td>7.3</td>
+                <td>28.5</td>
+                <td>35.5</td>
+                <td>56.3</td>
+              </tr>
+              <tr class="highlight">
+                <td>Total Average</td>
+                <td>-</td>
+                <td>5.8</td>
+                <td>5.9</td>
+                <td>10.4</td>
+                <td>9.8</td>
+                <td>42.0</td>
+                <td>28.4</td>
+                <td>68.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="real-world" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Real-World Experiments</p>
+          <h2>Real-World Experiments</h2>
+          <p>
+            Four long-horizon Franka Panda tasks evaluate whether memory can
+            preserve target identity, spatial state, and event order across
+            multiple real-world stages.
+          </p>
+        </div>
+        <div class="results-grid">
+          <article class="metric">
+            <span class="metric-value">91.5%</span>
+            <span class="metric-label">Real-world average stage success</span>
+            <p>Improves over LingBot-VA at 70.7% across four Franka tasks.</p>
+          </article>
+          <article class="metric">
+            <span class="metric-value">80.0%</span>
+            <span class="metric-label">Real-world average full-task success</span>
+            <p>Preserves target identity, spatial state, and event order across stages.</p>
+          </article>
+        </div>
+        <div class="table-wrap" role="region" aria-label="Real-world results table">
+          <table>
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th colspan="2">Find Blue Block</th>
+                <th colspan="2">Line Swap</th>
+                <th colspan="2">Triangle Swap</th>
+                <th colspan="2">Press Twice</th>
+                <th colspan="2">Avg.</th>
+              </tr>
+              <tr>
+                <th></th>
+                <th>SSR</th>
+                <th>SR</th>
+                <th>SSR</th>
+                <th>SR</th>
+                <th>SSR</th>
+                <th>SR</th>
+                <th>SSR</th>
+                <th>SR</th>
+                <th>SSR</th>
+                <th>SR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>pi0.5</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>5.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>1.3</td>
+                <td>0.0</td>
+              </tr>
+              <tr>
+                <td>Fast-WAM</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+                <td>0.0</td>
+              </tr>
+              <tr>
+                <td>LingBot-VA</td>
+                <td>52.5</td>
+                <td>10.0</td>
+                <td>78.4</td>
+                <td>60.0</td>
+                <td>51.8</td>
+                <td>40.0</td>
+                <td>100.0</td>
+                <td>100.0</td>
+                <td>70.7</td>
+                <td>52.5</td>
+              </tr>
+              <tr class="highlight">
+                <td>DiM-WAM</td>
+                <td>92.5</td>
+                <td>70.0</td>
+                <td>95.0</td>
+                <td>90.0</td>
+                <td>78.4</td>
+                <td>60.0</td>
+                <td>100.0</td>
+                <td>100.0</td>
+                <td>91.5</td>
+                <td>80.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="matrix-heading">
+          <h3>Real-World Experiment Videos</h3>
+          <p>
+            Rows are the four Franka tasks and columns are the evaluated
+            methods.
+          </p>
+        </div>
+        <div class="video-matrix" aria-label="Real-world experiment videos">
+          <div class="matrix-corner">Task / Method</div>
+          <div class="method-head">pi0.5</div>
+          <div class="method-head">Fast-WAM</div>
+          <div class="method-head">LingBot-VA</div>
+          <div class="method-head strong">DiM-WAM</div>
+        </div>
+      </section>
+
+      <section class="section two-column">
+        <figure class="wide-figure compact">
+          <img
+            src="assets/figures/rmbench_put_back_block.svg"
+            alt="RMBench put back block task key frames."
+          />
+          <figcaption>
+            RMBench tasks require preserving historical evidence after local
+            observations become ambiguous.
+          </figcaption>
+        </figure>
+        <figure class="wide-figure compact">
+          <img
+            src="assets/figures/panel_a_retained_event_timeline.svg"
+            alt="Timeline of retained memory events across memory banks."
+          />
+          <figcaption>
+            Banks retain different event positions and compress stage-transition
+            evidence with larger accumulated mass.
+          </figcaption>
+        </figure>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>DiM-WAM project page. Built as a static GitHub Pages site.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
