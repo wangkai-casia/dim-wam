@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=affiliation-icons-color-20260625" />
+    <link rel="stylesheet" href="styles.css?v=layout-refine-20260625" />
   </head>
   <body>
     <header class="site-header">
@@ -22,7 +22,7 @@
         <a class="brand" href="#">DiM-WAM</a>
         <div class="nav-links">
           <a href="#abstract">Abstract</a>
-          <a href="#method">Method</a>
+          <a href="#method">Framework</a>
           <a href="#simulation">Simulation</a>
           <a href="#real-world">Real-World</a>
           <a href="paper.pdf">Paper</a>
@@ -91,7 +91,7 @@
 
       <section id="abstract" class="section narrow">
         <p class="eyebrow">Abstract</p>
-        <h2>Long-horizon manipulation needs structured memory.</h2>
+        <h2>Abstract</h2>
         <p class="lead">
           DiM-WAM is a memory-augmented world-action model that organizes
           diverse historical events, local future dynamics, and global task
@@ -116,8 +116,8 @@
 
       <section id="method" class="section">
         <div class="section-heading">
-          <p class="eyebrow">Method</p>
-          <h2>Read, predict, interact, update.</h2>
+          <p class="eyebrow">Framework</p>
+          <h2>Framework</h2>
         </div>
         <figure class="wide-figure">
           <img
@@ -159,7 +159,7 @@
       <section id="simulation" class="section">
         <div class="section-heading">
           <p class="eyebrow">Simulation Experiments</p>
-          <h2>RMBench Simulation Results</h2>
+          <h2>Simulation Experiments</h2>
           <p>
             RMBench evaluates long-horizon non-Markovian manipulation tasks
             where local observations can become ambiguous after key historical
@@ -455,29 +455,40 @@
         </div>
       </section>
 
-      <section class="section two-column">
-        <figure class="wide-figure compact">
-          <img
-            src="assets/figures/panel_a_retained_event_timeline.svg"
-            alt="Timeline of retained memory events across memory banks."
-          />
-          <figcaption>
-            Retained memory events over normalized task progress. Each row
-            corresponds to one memory bank, and each dot denotes a retained
-            event token.
-          </figcaption>
-        </figure>
-        <figure class="wide-figure compact">
-          <img
-            src="assets/figures/panel_b_pca_bank_time_v2.svg"
-            alt="PCA visualization of memory tokens across banks."
-          />
-          <figcaption>
-            PCA of memory tokens from the same episode. Colors and marker
-            shapes indicate different memory banks, while ellipses summarize
-            bank-wise token distributions.
-          </figcaption>
-        </figure>
+      <section id="memory" class="section memory-section">
+        <div class="section-heading">
+          <p class="eyebrow">Memory Analysis</p>
+          <h2>Memory Behavior Analysis</h2>
+          <p>
+            The retained events and token-space structure show how different
+            banks preserve complementary historical evidence during one
+            complete episode.
+          </p>
+        </div>
+        <div class="memory-figures">
+          <figure class="wide-figure compact">
+            <img
+              src="assets/figures/panel_a_retained_event_timeline.svg"
+              alt="Timeline of retained memory events across memory banks."
+            />
+            <figcaption>
+              Retained memory events over normalized task progress. Each row
+              corresponds to one memory bank, and each dot denotes a retained
+              event token.
+            </figcaption>
+          </figure>
+          <figure class="wide-figure compact">
+            <img
+              src="assets/figures/panel_b_pca_bank_time_v2.svg"
+              alt="PCA visualization of memory tokens across banks."
+            />
+            <figcaption>
+              PCA of memory tokens from the same episode. Colors and marker
+              shapes indicate different memory banks, while ellipses summarize
+              bank-wise token distributions.
+            </figcaption>
+          </figure>
+        </div>
       </section>
     </main>
 
@@ -485,6 +496,6 @@
       <p>DiM-WAM project page. Built as a static GitHub Pages site.</p>
     </footer>
 
-    <script src="script.js?v=affiliation-icons-color-20260625"></script>
+    <script src="script.js?v=layout-refine-20260625"></script>
   </body>
 </html>
