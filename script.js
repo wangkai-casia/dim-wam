@@ -1,3 +1,42 @@
+const simulationCases = [
+  {
+    label: "Observe and Pick Up",
+    src: "assets/videos/simulation/observe_and_pickup.mp4",
+  },
+  {
+    label: "Rearrange Blocks",
+    src: "assets/videos/simulation/rearrange_blocks.mp4",
+  },
+  {
+    label: "Put Back Block",
+    src: "assets/videos/simulation/put_back_block.mp4",
+  },
+  {
+    label: "Swap Blocks",
+    src: "assets/videos/simulation/swap_blocks.mp4",
+  },
+  {
+    label: "Swap T",
+    src: "assets/videos/simulation/swap_T.mp4",
+  },
+  {
+    label: "Battery Try",
+    src: "assets/videos/simulation/battery_try.mp4",
+  },
+  {
+    label: "Blocks Ranking Try",
+    src: "assets/videos/simulation/block_ranking_try.mp4",
+  },
+  {
+    label: "Cover Blocks",
+    src: "assets/videos/simulation/cover_blocks.mp4",
+  },
+  {
+    label: "Press Button",
+    src: "assets/videos/simulation/press_button.mp4",
+  },
+];
+
 const realWorldTasks = [
   {
     id: "find-blue-block",
@@ -118,6 +157,10 @@ function getYouTubeEmbedUrl(youtubeId) {
 }
 
 function populateVideoMatrix(matrix, tasks, methods, videoFiles) {
+  if (!matrix) {
+    return;
+  }
+
   for (const task of tasks) {
     const taskHead = document.createElement("div");
     taskHead.className = "task-head";
@@ -185,6 +228,40 @@ function populateVideoMatrix(matrix, tasks, methods, videoFiles) {
     }
   }
 }
+
+function populateSimulationCases(grid, cases) {
+  if (!grid) {
+    return;
+  }
+
+  for (const item of cases) {
+    const slot = document.createElement("article");
+    slot.className = "video-slot case-slot";
+
+    const shell = document.createElement("div");
+    shell.className = "video-shell";
+
+    const video = document.createElement("video");
+    video.src = item.src;
+    video.controls = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    shell.appendChild(video);
+
+    const meta = document.createElement("div");
+    meta.className = "slot-meta";
+    meta.innerHTML = `<strong>${item.label}</strong><span>DiM-WAM</span>`;
+
+    slot.append(shell, meta);
+    grid.appendChild(slot);
+  }
+}
+
+populateSimulationCases(
+  document.querySelector(".case-video-grid"),
+  simulationCases,
+);
 
 populateVideoMatrix(
   document.querySelector(".video-matrix"),

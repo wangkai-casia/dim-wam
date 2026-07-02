@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="build" content="affiliation-refresh-20260626" />
+    <meta name="build" content="simulation-cases-20260702" />
     <title>DiM-WAM: Diverse Historical Event Memory</title>
     <meta
       name="description"
@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=affiliation-refresh-20260626" />
+    <link rel="stylesheet" href="styles.css?v=simulation-cases-20260702" />
   </head>
   <body>
     <header class="site-header">
@@ -25,7 +25,7 @@
           <a href="#method">Framework</a>
           <a href="#simulation">Simulation</a>
           <a href="#real-world">Real-World</a>
-          <a href="paper.pdf?v=20260626">Paper</a>
+          <a href="paper.pdf?v=20260702">Paper</a>
         </div>
       </nav>
     </header>
@@ -39,9 +39,9 @@
           <p class="authors">
             Kai Wang<sup>1,2</sup>, Zhaopeng Gu<sup>1,2</sup>,
             Yixiang Chen<sup>1</sup>, Yuan Xu<sup>1</sup>,
-            Qisen Ma<sup>1</sup>, Peng Su<sup>2</sup>,
-            Zhaowen Li<sup>2,*</sup>, Yan Huang<sup>1,3,*</sup>,
-            Liang Wang<sup>1</sup>
+            Qisen Ma<sup>1</sup>, Zhaowen Li<sup>2,*</sup>,
+            Yan Huang<sup>1,3,*</sup>, Liang Wang<sup>1</sup>,
+            Peng Su<sup>2</sup>
           </p>
           <p class="affiliations">
             <sup>1</sup> CASIA &nbsp;&nbsp;
@@ -50,7 +50,7 @@
             <sup>*</sup> Corresponding authors
           </p>
           <div class="actions" aria-label="Project links">
-            <a class="button paper" href="paper.pdf?v=20260626">
+            <a class="button paper" href="paper.pdf?v=20260702">
               <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M6 2h8l4 4v16H6z" />
                 <path d="M14 2v5h5" />
@@ -101,16 +101,18 @@
           World-action models jointly predict future visual states and actions,
           but short local windows are insufficient when correct behavior depends
           on earlier observations and task progress. DiM-WAM augments a base
-          WAM with diverse historical event memory: it extracts compact visual
-          events from real observations, updates multiple memory banks through
-          independent similarity-based merging, and reads bank-identity- and
-          time-embedded long-term context to condition video and action
-          denoising. A progress-supervision objective encourages memory tokens
-          to encode completed events, the current task stage, and implications
-          for the remaining task. On RMBench, DiM-WAM raises average success
-          from 28.4% with LingBot-VA to 69.8%, exceeding Mem-0 at 42.0%. On
-          four real-world Franka tasks, it improves average stage success from
-          70.7% to 91.5% and full-task success from 52.5% to 80.0%.
+          WAM with diverse historical event memory: learned bank-specific
+          queries extract complementary observation summaries, each memory bank
+          compresses its summary through a shared similarity-based update rule,
+          and retained bank tokens condition video and action denoising through
+          slot-relative temporal positions. A progress-supervision objective
+          encourages memory tokens to encode completed events, the current task
+          stage, and implications for the remaining task. In a controlled WAM
+          comparison that fixes the LingBot-VA backbone and audited evaluation
+          protocol, DiM-WAM improves RMBench average success from 34.8% to
+          69.8%. On four real-world Franka tasks, it improves average stage
+          success from 70.7% to 91.5% and full-task success from 52.5% to
+          80.0%.
         </p>
       </section>
 
@@ -170,12 +172,12 @@
           <article class="metric">
             <span class="metric-value">69.8%</span>
             <span class="metric-label">RMBench total average success</span>
-            <p>LingBot-VA baseline: 28.4%; Mem-0 explicit-memory baseline: 42.0%.</p>
+            <p>Controlled LingBot-VA baseline: 34.8%; Mem-0 benchmark baseline: 42.0%.</p>
           </article>
           <article class="metric">
             <span class="metric-value">80.6%</span>
             <span class="metric-label">Average success on M(1) tasks</span>
-            <p>Improves over LingBot-VA at 22.8% and Mem-0 at 52.8%.</p>
+            <p>Improves over controlled LingBot-VA at 34.2% and Mem-0 at 52.8%.</p>
           </article>
           <article class="metric">
             <span class="metric-value">56.3%</span>
@@ -218,7 +220,7 @@
                 <td>13.0</td>
                 <td>13.0</td>
                 <td>89.0</td>
-                <td>27.0</td>
+                <td>63.0</td>
                 <td>99.0</td>
               </tr>
               <tr>
@@ -229,7 +231,7 @@
                 <td>11.0</td>
                 <td>18.0</td>
                 <td>90.0</td>
-                <td>24.0</td>
+                <td>41.0</td>
                 <td>98.0</td>
               </tr>
               <tr>
@@ -240,7 +242,7 @@
                 <td>24.0</td>
                 <td>16.0</td>
                 <td>67.0</td>
-                <td>34.0</td>
+                <td>38.0</td>
                 <td>96.0</td>
               </tr>
               <tr>
@@ -262,7 +264,7 @@
                 <td>14.4</td>
                 <td>11.8</td>
                 <td>52.8</td>
-                <td>22.8</td>
+                <td>34.2</td>
                 <td>80.6</td>
               </tr>
               <tr>
@@ -328,12 +330,19 @@
                 <td>10.4</td>
                 <td>9.8</td>
                 <td>42.0</td>
-                <td>28.4</td>
+                <td>34.8</td>
                 <td>69.8</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <div class="matrix-heading">
+          <h3>Simulation Case Videos</h3>
+          <p>
+            DiM-WAM success cases for the nine RMBench long-horizon tasks.
+          </p>
+        </div>
+        <div class="case-video-grid" aria-label="DiM-WAM RMBench success case videos"></div>
       </section>
 
       <section id="real-world" class="section">
@@ -367,7 +376,7 @@
                 <th colspan="2">Line Swap</th>
                 <th colspan="2">Triangle Swap</th>
                 <th colspan="2">Press Twice</th>
-                <th colspan="2">Avg.</th>
+                <th colspan="2">Avg. (%)</th>
               </tr>
               <tr>
                 <th></th>
@@ -386,53 +395,53 @@
             <tbody>
               <tr>
                 <td>pi0.5</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>5.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
+                <td>0/40</td>
+                <td>0/10</td>
+                <td>3/60</td>
+                <td>0/10</td>
+                <td>0/60</td>
+                <td>0/10</td>
+                <td>0/30</td>
+                <td>0/10</td>
                 <td>1.3</td>
                 <td>0.0</td>
               </tr>
               <tr>
                 <td>Fast-WAM</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
-                <td>0.0</td>
+                <td>0/40</td>
+                <td>0/10</td>
+                <td>0/60</td>
+                <td>0/10</td>
+                <td>0/60</td>
+                <td>0/10</td>
+                <td>0/30</td>
+                <td>0/10</td>
                 <td>0.0</td>
                 <td>0.0</td>
               </tr>
               <tr>
                 <td>LingBot-VA</td>
-                <td>52.5</td>
-                <td>10.0</td>
-                <td>78.4</td>
-                <td>60.0</td>
-                <td>51.8</td>
-                <td>40.0</td>
-                <td>100.0</td>
-                <td>100.0</td>
+                <td>21/40</td>
+                <td>1/10</td>
+                <td>47/60</td>
+                <td>6/10</td>
+                <td>31/60</td>
+                <td>4/10</td>
+                <td>30/30</td>
+                <td>10/10</td>
                 <td>70.7</td>
                 <td>52.5</td>
               </tr>
               <tr class="highlight">
                 <td>DiM-WAM</td>
-                <td>92.5</td>
-                <td>70.0</td>
-                <td>95.0</td>
-                <td>90.0</td>
-                <td>78.4</td>
-                <td>60.0</td>
-                <td>100.0</td>
-                <td>100.0</td>
+                <td>37/40</td>
+                <td>7/10</td>
+                <td>57/60</td>
+                <td>9/10</td>
+                <td>47/60</td>
+                <td>6/10</td>
+                <td>30/30</td>
+                <td>10/10</td>
                 <td>91.5</td>
                 <td>80.0</td>
               </tr>
@@ -496,6 +505,6 @@
       <p>DiM-WAM project page. Built as a static GitHub Pages site.</p>
     </footer>
 
-    <script src="script.js?v=affiliation-refresh-20260626"></script>
+    <script src="script.js?v=simulation-cases-20260702"></script>
   </body>
 </html>

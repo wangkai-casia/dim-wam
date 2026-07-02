@@ -429,6 +429,12 @@ tbody tr:last-child td {
   padding-bottom: 0.25rem;
 }
 
+.case-video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
 .matrix-corner,
 .method-head,
 .task-head {
@@ -467,6 +473,10 @@ tbody tr:last-child td {
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 10px;
   background: #fff;
+}
+
+.case-slot {
+  min-width: 0;
 }
 
 .video-shell {
@@ -572,6 +582,10 @@ tbody tr:last-child td {
     grid-template-columns: 118px repeat(4, 240px);
   }
 
+  .case-video-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .wide-figure.compact img {
     height: auto;
   }
@@ -593,5 +607,9 @@ tbody tr:last-child td {
 
   .section {
     padding-top: 2.25rem;
+  }
+
+  .case-video-grid {
+    grid-template-columns: 1fr;
   }
 }
